@@ -94,10 +94,15 @@ describe('effect', () => {
     let runner = effect(() => {
       dummy = obj.prop;
     });
+    effect(() => {
+      console.log('我是滴滴');
+    });
     obj.prop = 2;
     expect(dummy).toBe(2);
     stop(runner);
-    obj.prop = 3
+    // obj.prop = 3
+    obj.prop++;
+    expect(obj.prop).toBe(3)
     expect(dummy).toBe(2)
   });
   it("onStop", () => {
