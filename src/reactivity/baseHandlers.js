@@ -21,6 +21,7 @@ function createGetter(isReadonly = false, shallow = false) {
     }
     // 如果是嵌套对象则深度代理
     if(isObject(res)){
+      // 继续递归处理
       res = isReadonly ? readonly(res) : reactive(res);
     }
     // readonly为只读对象, 不能设置set， 自然不需要触发依赖，当然也就不需要收集依赖
@@ -47,7 +48,6 @@ export const readonlyHandlers = {
     return true;
   }
 }
-
 export const shallowReadonlyHandler = extend({}, readonlyHandlers, {
   get: shallowReadonlyGet
 });

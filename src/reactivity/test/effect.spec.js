@@ -103,6 +103,7 @@ describe('effect', () => {
     // obj.prop = 3
     obj.prop++;
     expect(obj.prop).toBe(3)
+    // 不会触发副作用函数执行
     expect(dummy).toBe(2)
   });
   it("onStop", () => {
