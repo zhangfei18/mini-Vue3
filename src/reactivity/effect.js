@@ -33,7 +33,7 @@ function effect(fn, options = {}) {
   effectFn.deps = [];
   effectFn.active = true;
   // 如果参数中lazy为true(计算属性)则延迟执行副作用函数
-  if(!options.lazy){
+  if (!options.lazy) {
     // 执行包装后的副作用函数
     effectFn();
   }
@@ -54,7 +54,11 @@ function track(target, key) {
   if (!deps) {
     depsMap.set(key, (deps = new Set()));
   }
-  if(activeEffectFn){
+  trackEffects(deps);
+}
+// 抽离核心依赖收集代码
+function trackEffects(deps) {
+  if (activeEffectFn) {
     deps.add(activeEffectFn);
     activeEffectFn.deps.push(deps);
   }
@@ -63,10 +67,13 @@ function track(target, key) {
 function trigger(target, key) {
   // 获取key与deps的映射表
   let depsMap = bucket.get(target);
-  if(!depsMap) return;
+  if (!depsMap) return;
   // 获取某个key的deps
   let effects = depsMap.get(key);
-  if(!effects) return;
+  if (!effects) return;
+  triggerEffects(effects);
+}
+function triggerEffects(effects) {
   // 申请一个新的set来存储后面要执行的副作用函数
   let effectsToRun = new Set();
   effects.forEach((effectFn) => {
@@ -84,16 +91,16 @@ function trigger(target, key) {
       effectFn()
     }
   })
-}
+};
 // 调用了stop函数后, 再出发响应式数据的set后不会触发副作用函数的执行
-function stop(effectFn){
-  if(effectFn.active){
+function stop(effectFn) {
+  if (effectFn.active) {
     cleanup(effectFn)
     effectFn.active = false;
   }
-  if(effectFn.onStop){
+  if (effectFn.onStop) {
     effectFn.onStop();
   }
 }
 
-export { effect, track, trigger, stop };
+export { effect, track, trigger, stop, trackEffects, triggerEffects };
