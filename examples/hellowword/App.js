@@ -1,7 +1,10 @@
 import { h } from '../../lib/mini-vue.es.js'
+window.self = {}
 export const App = {
   render() {
-    return h('div', { class: 'red' }, [h('span', {class: 'blue'}, 'Hi'), h('h1', {class: 'blue'}, 'mini'), h('span', {class: 'blue'}, 'vue')]);
+    window.self = this
+    // return h('div', { class: 'red' }, [h('span', {class: 'blue'}, 'Hi'), h('h1', {class: 'blue'}, 'mini'), h('span', {class: 'blue'}, 'vue')]);
+    return h('div', { class: 'red' }, `Hi, ${this.msg}`);
   },
   setup() {
     return {
