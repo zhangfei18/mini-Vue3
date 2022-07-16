@@ -1,5 +1,5 @@
 
-export function createComponentInstance(vnode, rootComtanier) {
+export function createComponentInstance(vnode, rootComtainer) {
   const instance = {
     vnode
   };
@@ -26,7 +26,7 @@ function handleSetupResult(instance, setupResult) {
 }
 function finishComponentSetup(instance) {
   const component = instance.vnode.type;
-  if (!instance.render) {
+  if (component.render) {
     instance.render = component.render;
   }
 }

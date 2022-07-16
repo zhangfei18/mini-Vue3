@@ -2,9 +2,9 @@ import { createVNode } from './vnode';
 import { render } from './renderer';
 export function createApp(rootComponent){
   return {
-    mount(rootComtanier) {
+    mount(rootComtainer) {
       const vnode = createVNode(rootComponent);
-      render(vnode, rootComtanier);
+      render(vnode, rootComtainer);
     },
   }
 }

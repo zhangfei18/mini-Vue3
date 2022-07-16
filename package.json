@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "jest": "jest"
+    "jest": "jest",
+    "build": "rollup -c rollup.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
@@ -13,6 +14,7 @@
     "@types/jest": "^28.1.4",
     "babel-jest": "^28.1.2",
     "jest": "^28.1.2",
+    "rollup": "^2.76.0",
     "typescript": "^4.7.4"
   }
 }
