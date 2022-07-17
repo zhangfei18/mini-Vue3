@@ -1,3 +1,4 @@
+import { ShapeFlags } from '../shared/ShapeFlags';
 import { createComponentInstance, setupComponent } from './component';
 
 
@@ -10,9 +11,10 @@ export function render(vnode, rootComtainer) {
   }
 }
 function patch(vnode, rootComtainer) {
-  if (typeof vnode.type === 'string') {
+  const { shapeFlag } = vnode
+  if (shapeFlag & ShapeFlags.ELEMENT) {
     processElement(vnode, rootComtainer);
-  } else if (typeof vnode.type === 'object') {
+  } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, rootComtainer);
   }
 }
@@ -23,7 +25,7 @@ function processElement(vnode, rootComtainer) {
 };
 
 function mountElement(vnode, rootComtainer) {
-  const { props, children } = vnode;
+  const { props, children, shapeFlag } = vnode;
   const el = vnode.el = document.createElement(vnode.type);
   // 处理props
   for (const key in props) {
@@ -31,19 +33,18 @@ function mountElement(vnode, rootComtainer) {
     el.setAttribute(key, prop);
   }
   // 处理children
-  mountChildren(children, el)
+  if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+    mountChildren(children, el)
+  } else if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+    el.textContent = children;
+  }
 
   rootComtainer.appendChild(el)
 }
 function mountChildren(children, el) {
-  // children不是数组
-  if (Array.isArray(children)) {
-    children.forEach((c) => {
-      patch(c, el)
-    })
-  } else if (typeof children === 'string') {// children是数组
-    el.textContent = children;
-  }
+  children.forEach((c) => {
+    patch(c, el)
+  })
 }
 
 // 处理组件
@@ -57,7 +58,7 @@ function mountComponent(vnode, rootComtainer) {
 }
 function setupRenderEffect(instance, rootComtainer) {
   // 执行render函数&改变其this
-  const subTree = instance.render.call(instance.proxy)
+  const subTree = instance.render.call(instance.renderContext)
   // 递归处理
   patch(subTree, rootComtainer);
   instance.vnode.el = subTree.el
