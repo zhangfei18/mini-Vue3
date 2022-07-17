@@ -16,7 +16,12 @@ function patch(vnode, rootComtainer) {
     processElement(vnode, rootComtainer);
   } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, rootComtainer);
+  }else{
+    processTextContent(vnode, rootComtainer)
   }
+}
+function processTextContent(vnode, rootComtainer){
+  rootComtainer.textContent = vnode;
 }
 // 处理元素节点
 function processElement(vnode, rootComtainer) {
@@ -28,9 +33,16 @@ function mountElement(vnode, rootComtainer) {
   const { props, children, shapeFlag } = vnode;
   const el = vnode.el = document.createElement(vnode.type);
   // 处理props
+  // 判断是否是事件
+  const isOn = (key) => /^on[A-Z]/.test(key);
   for (const key in props) {
     let prop = props[key]
-    el.setAttribute(key, prop);
+    if (isOn(key)) {
+      const eventName = key.slice(2).toLowerCase();
+      el.addEventListener(eventName, prop);
+    } else {
+      el.setAttribute(key, prop);
+    }
   }
   // 处理children
   if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
@@ -38,7 +50,6 @@ function mountElement(vnode, rootComtainer) {
   } else if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
     el.textContent = children;
   }
-
   rootComtainer.appendChild(el)
 }
 function mountChildren(children, el) {

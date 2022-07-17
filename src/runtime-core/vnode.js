@@ -3,7 +3,7 @@ import { ShapeFlags } from "../shared/ShapeFlags";
 export function createVNode(type, props, children) {
   const vnode = {
     type,
-    props,
+    props: props || {},
     children,
     el: null,
     shapeFlag: getShapeFlag(type)

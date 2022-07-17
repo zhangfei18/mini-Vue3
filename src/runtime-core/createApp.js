@@ -5,6 +5,6 @@ export function createApp(rootComponent){
     mount(rootComtainer) {
       const vnode = createVNode(rootComponent);
       render(vnode, rootComtainer);
-    },
+    }
   }
 }

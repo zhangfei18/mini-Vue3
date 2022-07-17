@@ -1,4 +1,4 @@
-import { extend } from "../shared";
+import { extend } from "../shared/index.js";
 
 let activeEffectFn;
 let effetStack = [];
