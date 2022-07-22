@@ -5,8 +5,11 @@ window.self = {}
 export const App = {
   render() {
     window.self = this
+    const add = function(a, b){
+      console.log('app-add', a, b)
+    }
     // return h('div', { class: 'red' }, [h('span', {class: 'blue'}, 'Hi'), h('h1', {class: 'blue'}, 'mini'), h('span', {class: 'blue'}, 'vue')]);
-    return h('div', { class: 'red', onClick: () => {console.log('click')} }, [`Hi, ${this.msg}`, h(Foo, {count: 1})]);
+    return h('div', { class: 'red', onClick: () => {console.log('click')} }, [`Hi, ${this.msg}`, h(Foo, {count: 1, onAdd: add})]);
   },
   setup() {
     return {
