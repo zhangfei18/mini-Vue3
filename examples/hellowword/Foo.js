@@ -3,7 +3,9 @@ export const Foo = {
   setup(props, { emit }) {
     function btnClickHandler(e) {
       e.stopPropagation();
+      // 向父级抛出事件
       emit('add', 1, 2)
+      emit('get-name', 1, 2)
     }
     props.count = 2
     return {

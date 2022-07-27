@@ -1,5 +1,5 @@
-import { ShapeFlags } from '../shared/ShapeFlags';
-import { createComponentInstance, setupComponent } from './component';
+import { ShapeFlags } from '../shared/ShapeFlags.js';
+import { createComponentInstance, setupComponent } from './component.js';
 
 
 export function render(vnode, rootComtainer) {
