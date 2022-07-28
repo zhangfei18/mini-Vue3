@@ -1,5 +1,4 @@
-import { h } from "../../lib/mini-vue.es.js"
-import { renderSlots } from "../../src/runtime-core/helpers/renderSlots.js"
+import { h, renderSlots } from "../../lib/mini-vue.es.js"
 
 export const Foo = {
   render() {

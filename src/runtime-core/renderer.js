@@ -1,5 +1,6 @@
 import { ShapeFlags } from '../shared/ShapeFlags.js';
 import { createComponentInstance, setupComponent } from './component.js';
+import { Fragment, TextNode } from './vnode.js';
 
 
 export function render(vnode, rootComtainer) {
@@ -11,14 +12,37 @@ export function render(vnode, rootComtainer) {
   }
 }
 function patch(vnode, rootComtainer) {
-  const { shapeFlag } = vnode
-  if (shapeFlag & ShapeFlags.ELEMENT) {
-    processElement(vnode, rootComtainer);
-  } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-    processComponent(vnode, rootComtainer);
-  }else{
-    processTextContent(vnode, rootComtainer)
+  const { shapeFlag, type } = vnode
+  let equal = Fragment === type
+  console.log(equal)
+  
+  switch (type) {
+    case Fragment:
+      processFragment(vnode, rootComtainer)
+      break;
+    case TextNode: {
+      processTextNode(vnode, rootComtainer)
+      break
+    }
+    default:
+      if (shapeFlag & ShapeFlags.ELEMENT) {
+        processElement(vnode, rootComtainer);
+      } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+        processComponent(vnode, rootComtainer);
+      }
+      break;
   }
+}
+function processTextNode(vnode, rootComtainer){
+  const { children } = vnode
+  console.log(children)
+  let text  = document.createTextNode(children);
+  rootComtainer.appendChild(text)
+}
+
+
+function processFragment(vnode, rootComtainer){
+  mountChildren(vnode.children, rootComtainer)
 }
 function processTextContent(vnode, rootComtainer){
   rootComtainer.textContent = vnode;
