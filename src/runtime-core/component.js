@@ -16,9 +16,15 @@ import { initSlots } from './componentSlots.js';
  * }
  */
 
-export function createComponentInstance(vnode, rootComtainer) {
+export function createComponentInstance(vnode, rootComtainer, parent) {
   const instance = {
     vnode,
+    type: vnode.type,
+    setupState: {},
+    props: {},
+    slots: {},
+    provides: parent ? parent.provides : {},
+    parent: parent || {},
     emit(){}
   };
   instance.emit = emit.bind(null, instance)
