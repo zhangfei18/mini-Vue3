@@ -4,19 +4,24 @@ const createElement = function (type) {
 }
 // 判断是否是事件
 const isOn = (key) => /^on[A-Z]/.test(key);
-const patchProps = function (el, key, val) {
+const hostPatchProps = function (el, key, preVal, nextVal) {
+  console.log('hostPatchProps', preVal, nextVal);
   if (isOn(key)) {
     const eventName = key.slice(2).toLowerCase();
-    el.addEventListener(eventName, val);
+    el.addEventListener(eventName, nextVal);
   } else {
-    el.setAttribute(key, val);
+    if(nextVal === undefined || nextVal === null){
+      el.removeAttribute(key);
+    }else{
+      el.setAttribute(key, nextVal);
+    }
   }
 }
 const insert = function (el, parent) {
   parent.appendChild(el)
 }
 
-let renderer = createRenderer({ createElement, patchProps, insert })
+let renderer = createRenderer({ createElement, hostPatchProps, insert })
 
 export const createApp = function (...args) {
   return renderer.createApp(...args);
